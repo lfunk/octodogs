@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 mongoose.Promise = require('bluebird');
 var db = require('../index.js');
+var userCtrl = require('./user.js');
 
 /*
   Callbacks must take an err and a result
@@ -57,24 +58,37 @@ var getItineraryStops = function(itinId, callback) {
     privacy: String,
   }
 */
-var saveNewItinerary = function(itinerary, userId, callback) {
-  itinerary.user = userId; // this assumes the userId is an ObjectId, not a string!
-  itinerary['created_at'] = new Date();
-  itinerary['last_updated'] = new Date();
-  itinerary.stops = [];
+var saveNewItinerary = function(itinerary, callback) {
+
+  let newItin = {
+    name: itinerary.name,
+    desription: itinerary.desription,
+    privacy: itinerary.privacy,
+    created_at: new Date(),
+    last_updated: new Date(),
+    stops: []
+  }
+
+  userCtrl.getUserId(itinerary.user)
+  .then(function(id){ newItin.user = id}); // this assumes the userId is an ObjectId, not a string!
+  //itinerary['created_at'] = new Date();
+  //itinerary['last_updated'] = new Date();
+  //itinerary.stops = [];
 
   var newlySavedItin = null;
 
-  db.Itinerary.create(itinerary)
-    .then(function(newItin) {
-      return newItin.save();
+  db.Itinerary.create(newItin)
+    .then(function(createdItin) {
+      return createdItin.save()
     })
     .then(function(savedItin) {
+      console.log("saved: ", savedItin)
       newlySavedItin = savedItin;
       var itinId = savedItin['_id'];
-      return db.User.findOneAndUpdate({ '_id': userId }, {$push: {itineraries: itinId}});
+      var userId = savedItin['user'];
+      db.User.findOneAndUpdate({ '_id': userId }, {$push: {itineraries: itinId}}, { new: true });
     })
-    .then(function() {
+    .then(function(result) {
       callback(null, newlySavedItin);
     })
     .catch(function(err) {
@@ -108,4 +122,5 @@ var saveNewStop = function(itinID, stop, callback) {
 module.exports = {
   getItineraryById: getItineraryById,
   getItineraryStops: getItineraryStops,
+  saveNewItinerary: saveNewItinerary
 };

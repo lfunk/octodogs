@@ -62,14 +62,17 @@ class App extends React.Component {
   }
 
   getItineraries(userId) {
-    $.get('/api/users/' + userId + '/itineraries', async (data) => {
+    $.get('/api/users/' + userId + '/itineraries', async (itineraries) => {
       // TODO: Replace static itinerary ids with data once db is hooked up
-      var itineraryPromises = ['5b91fed798187d3ae616929f', '5b91fed798187d3ae61692a3'].map(async (itinerary) => {
-        return await $.get('api/itineraries/' + itinerary);
-      });
-      var newItineraries = await Promise.all(itineraryPromises);
+      //console.log(data);
+      // var itineraryPromises = data.map(async (itinerary) => {
+      //   return await $.get('api/itineraries/' + itinerary);
+      // });
+      // var newItineraries = await Promise.all(itineraryPromises);
+      // console.log("newItineraries", newItineraries);
+      console.log(itineraries);
       this.setState({
-        itineraries: newItineraries
+        itineraries: itineraries
       })
     });
   }

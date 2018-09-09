@@ -11,7 +11,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 console.log("dirname: ", __dirname);
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use(express.static(path.join(__dirname, '/../client')));
 app.use('/bootstrap', express.static(__dirname + '/../node_modules/bootstrap/dist/css'));
 app.use('/scripts', express.static(__dirname + '/../node_modules'));

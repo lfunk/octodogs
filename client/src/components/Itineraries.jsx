@@ -11,7 +11,7 @@ var Itineraries = (props) => (
       {props.itineraries.map((itinerary, index) =>
         <ItineraryEntry
           itinerary={itinerary}
-          key={itinerary.id}
+          key={itinerary._id}
           index={index}
           handleItineraryClick={props.handleItineraryClick}
         />

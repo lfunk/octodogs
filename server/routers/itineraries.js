@@ -6,14 +6,15 @@ router.route('/')
   .post(function(req, res) {
     // TODO: This should save a new itinerary to the database
     // Uncomment the below and delete the extra res.send when the controller is ready.
-    /*
+    let itinerary = req.body;
+    console.log("itinerary received: ", itinerary);
     controller.saveNewItinerary(itinerary, function(err, result) {
       if (err) {
         return console.error(err);
       }
       res.send('Itinerary saved.'); // change as needed
-    */
-    res.send('POST on /api/itineraries'); // DELETE ME WHEN DONE
+      //res.send('POST on /api/itineraries'); // DELETE ME WHEN DONE
+    });
   });
 
 // Get an itinerary by its ID

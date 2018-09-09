@@ -81,7 +81,7 @@ class CurrentItineraryModal extends React.Component {
                   {this.props.currentItinerary.stops.map((stop, index) =>
                     <StopEntry
                       stop={stop}
-                      key={stop.id}
+                      key={stop._id}
                       index={index}
                     />
                   )}
